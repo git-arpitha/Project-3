@@ -90,8 +90,8 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=proj3 \
-              --stack-name "your back-end stack with s3-kk1j287dhjppmz437-udacity" \
-              --parameter-overrides ID="s3-kk1j287dhjppmz437-udacity"  
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               exit 1
       - run:
           name: Ensure front-end infrastructure exist
@@ -99,8 +99,8 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=proj3 \
-              --stack-name "your front-end stack name with s3-kk1j287dhjppmz437-udacity" \
-              --parameter-overrides ID="s3-kk1j287dhjppmz437-udacity"  
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               exit 1
       - run:
           name: Add back-end ip to ansible inventory
