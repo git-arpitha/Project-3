@@ -213,6 +213,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - configure-infrastructure:
-      - run-migrations:
+      - deploy-infrastructure
+      - configure-infrastructure
+      - run-migrations
 
