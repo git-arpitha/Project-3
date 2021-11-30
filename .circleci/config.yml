@@ -41,8 +41,6 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
       - run:
             name: test-front-end
             command: 
@@ -55,8 +53,6 @@ jobs:
        - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
       - run: apk add --update curl
       - run:
            name: smoke test
