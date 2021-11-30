@@ -63,7 +63,7 @@ jobs:
     steps:
        - checkout
        - run:
-            command: 
+            command: |
               cd frontend
               npm audit --audit-level=critical
 
@@ -73,7 +73,7 @@ jobs:
     steps:
        - checkout
        - run:
-           command: 
+           command: |
               cd backend
               npm audit --audit-level=critical
 
