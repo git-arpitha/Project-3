@@ -63,9 +63,9 @@ jobs:
     steps:
        - checkout
        - run:
-         command: 
-            cd frontend
-            npm audit --audit-level=critical
+            command: 
+              cd frontend
+              npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -73,9 +73,9 @@ jobs:
     steps:
        - checkout
        - run:
-         command: 
-            cd backend
-            npm audit --audit-level=critical
+           command: 
+              cd backend
+              npm audit --audit-level=critical
 
 workflows:
   default:
