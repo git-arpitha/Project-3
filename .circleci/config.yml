@@ -6,9 +6,11 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+       - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Build front-end
-          command: |
+          command: 
               cd frontend
               npm install
               npm run build
@@ -22,9 +24,11 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Back-end build
-          command: |
+          command: 
              echo "Version of npm : "
              npm -v
       - save_cache:
@@ -51,7 +55,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [backend-build]
       - run: apk add --update curl
       - run:
            name: smoke test
