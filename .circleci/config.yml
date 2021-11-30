@@ -25,8 +25,7 @@ jobs:
           command: |
              echo "Version of npm : "
              npm -v
-             exit 1
-
+             
 
           
   test-frontend:
@@ -46,7 +45,7 @@ jobs:
        - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: apk add --update curl
+      - run: apt-get install curl
       - run:
            name: smoke test
            command: |
