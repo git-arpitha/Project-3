@@ -28,9 +28,10 @@ jobs:
           keys: [backend-build]
       - run:
           name: Back-end build
-          command: 
+          command: |
              echo "Version of npm : "
              npm -v
+             exit 1
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
