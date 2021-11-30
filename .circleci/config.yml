@@ -12,8 +12,6 @@ jobs:
               cd frontend
               npm install
               npm run build
-
-
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -26,7 +24,6 @@ jobs:
              echo "Version of npm : "
              npm -v
              
-
           
   test-frontend:
     docker:
@@ -68,7 +65,6 @@ jobs:
               npm install
               npm install oauth-sign@^0.9.0
               
-
   scan-backend:
     docker:
        - image: circleci/node:13.8.0
@@ -117,54 +113,52 @@ jobs:
             - project/.circleci/ansible/inventory.txt
             
   configure-infrastructure:
-        docker:
-           - image:  circleci/node:13.8.0
-        steps:
-            - checkout
-            - add_ssh_keys:
-                fingerprints: ["0e:b2:8c:9c:20:90:37:29:e5:ff:d2:83:69:1a:38:53"]
-            - attach_workspace:
-                at: ~/
-            - run:
-                name: Install dependencies
-                command: |
-                     cd backend
-                     npm install 
-
-          - run:
-              name: Configure server
-              command: |
-                  cd .circleci/ansible
-                  ansible-playbook -i inventory.txt configure-server.yml
+	docker:
+	   - image:  circleci/node:13.8.0
+	steps:
+		- checkout
+		- add_ssh_keys:
+			fingerprints: ["0e:b2:8c:9c:20:90:37:29:e5:ff:d2:83:69:1a:38:53"]
+		- attach_workspace:
+			at: ~/
+		- run:
+			name: Install dependencies
+			command: |
+				 cd backend
+				 npm install 
+		- run:
+		  name: Configure server
+		  command: |
+			  cd .circleci/ansible
+			  ansible-playbook -i inventory.txt configure-server.yml
                 
           # Here's where you will add some code to rollback on failure      
 
   run-migrations:
-      docker:
-         - image: circleci/node:13.8.0
-      steps:
-        - checkout
-        - run:
-            name: Run migrations
-            command: |
-                 cd backend
-                 npm install
-                 # Run and sve the migration output
-                 npm run migrations > migrations_dump.txt
-        - run:
-            name: Send migration results to memstash
-            command: |
-                if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-                then
-                    curl -H "Content-Type: text/plain" -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
-                fi
-
-       # Here's where you will add some code to rollback on failure      
+    docker:
+		- image: circleci/node:13.8.0
+    steps:
+		- checkout
+		- run:
+			name: Run migrations
+			command: |
+				cd backend
+				npm install
+				# Run and sve the migration output
+				npm run migrations > migrations_dump.txt
+		- run:
+			name: Send migration results to memstash
+			command: |
+				if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+				then
+					curl -H "Content-Type: text/plain" -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+				fi
+        # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
-      docker:
+    docker:
         - image: amazon/aws-cli
-      steps:
+    steps:
         - checkout
         - run:
             name: Install dependencies
@@ -188,12 +182,10 @@ jobs:
               npm run build
               tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
               aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-
-
   deploy-backend:
-      docker:
+    docker:
         - image:  circleci/node:13.8.0
-      steps:
+    steps:
         - checkout
         - add_ssh_keys:
              fingerprints: ["0e:b2:8c:9c:20:90:37:29:e5:ff:d2:83:69:1a:38:53"]
@@ -205,7 +197,6 @@ jobs:
               npm install
               pm2 stop default
               pm2 start npm -- start
-
         - run:
             name: Deploy backend
             command: |
@@ -245,5 +236,3 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
-     
-      
