@@ -57,13 +57,31 @@ jobs:
              else
                exit 1
              fi            
+  scan-frontend:
+    docker:
+       - image: circleci/node:13.8.0
+    steps:
+       - run:
+         command: 
+            cd frontend
+            npm audit --audit-level=critical
 
+  scan-backend:
+    docker:
+       - image: circleci/node:13.8.0
+    steps:
+       - run:
+         command: 
+            cd backend
+            npm audit --audit-level=critical
 
 workflows:
   default:
     jobs:
       - build-frontend
       - build-backend
-      - test-frontend
-      - test-backend
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       
