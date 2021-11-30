@@ -88,7 +88,7 @@ jobs:
               --tags project=proj3 \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
-              exit 1
+             
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -97,7 +97,7 @@ jobs:
               --tags project=proj3 \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
-              exit 1
+             
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -144,6 +144,7 @@ jobs:
             command: |
                 cd backend
                 npm install
+                npm audit fix --audit-level=critical
                 # Run and sve the migration output
                 npm run migrations > migrations_dump.txt
         - run:
