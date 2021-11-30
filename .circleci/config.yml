@@ -45,7 +45,7 @@ jobs:
        - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: apt-get install curl
+      - run: sudo apt-get install curl
       - run:
            name: smoke test
            command: |
