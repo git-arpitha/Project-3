@@ -116,7 +116,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
             
- configure-infrastructure:
+  configure-infrastructure:
        docker:
          - image:  circleci/node:13.8.0
       steps:
