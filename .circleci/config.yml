@@ -12,6 +12,9 @@ jobs:
               cd frontend
               npm install
               npm run build
+       - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
 
 
   build-backend:
@@ -24,7 +27,43 @@ jobs:
           command: |
              echo "Version of npm : "
              npm -v
-            
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
+          
+  test-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+            name: test-front-end
+            command: 
+                cd frontend
+                npm install
+                npm run test
+                
+  test-backend:
+    docker:
+       - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run: apk add --update curl
+      - run:
+           name: smoke test
+           command: |
+             URL="https://blog.udacity.com/"
+             # Test if website exists
+             if curl -s --head ${URL} 
+             then
+               return 0
+             else
+               return 1
+             fi            
 
 
 workflows:
@@ -32,3 +71,6 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
+      - test-frontend
+      - test-backend
+      
