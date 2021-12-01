@@ -115,7 +115,7 @@ jobs:
       - run:
           command:  |
                  cd backend
-                 npm run deploy
+                 npm run build
       - slack/notify:
           channel: Project3
           event: always
