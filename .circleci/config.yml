@@ -174,7 +174,6 @@ jobs:
                 echo "[web]" > inventory.txt
                 aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                --filters "Name=tag:proj3" \
                 --output text >> inventory
                 cat inventory.txt
             
@@ -249,12 +248,12 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-     # -  slack-deploy
-    #  - deploy-infrastructure:
-     #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-     # - configure-infrastructure:
-     #     requires: [deploy-infrastructure]
-      - run-migrations
-     #     requires: [configure-infrastructure]
+      #-  slack-deploy
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       
 
