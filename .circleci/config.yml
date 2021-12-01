@@ -12,14 +12,24 @@ commands:
           name: Delete S3 content
           when: on_fail
           command: |
-            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+                cd backend
+                npm install
+                sudo chown -R `whoami` ~/.npm
+                sudo chown -R `whoami` /usr/local/lib/node_modules
+                npm install -g aws-cli
+                aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
-            aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}  
+                 cd backend
+                npm install
+                sudo chown -R `whoami` ~/.npm
+                sudo chown -R `whoami` /usr/local/lib/node_modules
+                npm install -g aws-cli
+                aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
+                aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}  
 jobs:
   build-frontend:
     docker:
@@ -195,6 +205,8 @@ jobs:
               command: |
                       cd backend
                       npm install
+                      sudo chown -R `whoami` ~/.npm
+                      sudo chown -R `whoami` /usr/local/lib/node_modules
                       sudo apt-get update
                       sudo apt-get install ansible
                       npm install -g aws-cli
@@ -216,6 +228,8 @@ jobs:
             command: |
                 cd backend
                 npm install
+                sudo chown -R `whoami` ~/.npm
+                sudo chown -R `whoami` /usr/local/lib/node_modules
                 sudo apt-get update
                 sudo apt-get install ansible
                 npm install -g aws-cli
