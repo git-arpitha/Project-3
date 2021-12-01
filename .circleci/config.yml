@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.1
+  
 jobs:
   build-frontend:
     docker:
@@ -106,7 +109,7 @@ jobs:
   slack-deploy:
     docker:
       - image: circleci/node:13.8.0
-      - image: circleci/slack@4.1
+
     steps: 
       - checkout
       - run:
