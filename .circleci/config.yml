@@ -114,12 +114,7 @@ jobs:
       - slack/notify:
           channel: D02P18M0GE7
           event: all
-          template: basic_fail_1
-workflows:
-  deploy_and_notify:
-    jobs:
-      -  slack-deploy:
-          context: slack-secrets                     
+          template: basic_fail_1     
 
 workflows:
   default:
