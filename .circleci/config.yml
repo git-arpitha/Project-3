@@ -223,11 +223,10 @@ jobs:
             command: |
                 cd backend
                 npm install
-                sudo chown -R `whoami` ~/.npm
-                sudo chown -R `whoami` /usr/local/lib/node_modules
-                sudo apt-get update
-                sudo apt-get install ansible
-                npm install -g aws-cli
+                npm run build
+                sudo apt-get -y -qq update
+                sudo apt-get -y -qq install python3
+                sudo apt-get -qq install awscli
                 npm run migrations > migrations_dump.txt
         - run:
             name: Send migration results to memstash
@@ -251,11 +250,11 @@ workflows:
       - scan-frontend:
           requires: [build-frontend]
      # -  slack-deploy
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
+    #  - deploy-infrastructure:
+     #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+     # - configure-infrastructure:
+     #     requires: [deploy-infrastructure]
+      - run-migrations
+     #     requires: [configure-infrastructure]
       
 
