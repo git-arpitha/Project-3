@@ -101,19 +101,38 @@ jobs:
                  npm audit fix --audit-level=critical --force
        - save_cache:
            paths: [backend/node_modules]
-           key: scan-backend        
-                     
+           key: scan-backend  
+
+  slack-deploy:
+     docker:
+       - image: circleci/node:13.8.0
+       - image: circleci/slack@4.1
+    steps:
+      - checkout
+      - run:
+          command: npm run deploy
+      - slack/notify:
+          channel: D02P18M0GE7
+          event: all
+          template: basic_fail_1
+workflows:
+  deploy_and_notify:
+    jobs:
+      -  slack-deploy:
+          context: slack-secrets                     
 
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
+  #    - build-frontend
+  #    - build-backend
+  #    - test-frontend:
+  #        requires: [build-frontend]
+  #    - test-backend:
+  #        requires: [build-backend]
+  #    - scan-backend:
+  #        requires: [build-backend]
+  #    - scan-frontend:
+  #        requires: [build-frontend]
+      -  slack-deploy:
+          context: slack-secrets  
