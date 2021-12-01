@@ -180,30 +180,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
             
       - destroy-environment
-    configure-infrastructure:
-    docker:
-        - image:  circleci/node:13.8.0
-    steps:
-        - checkout
-        - add_ssh_keys:
-                fingerprints: ["d7:fd:94:12:70:77:34:28:cf:cc:90:77:11:49:c9:2a"]
-        - attach_workspace:
-                at: ~/
-        - run:
-              name: Install dependencies
-              command: |
-                      cd backend
-                      npm install
-                      sudo apt-get update
-                      sudo apt-get install ansible
-                      npm install -g aws-cli
-        - run:
-              name: Configure server
-              command: |
-                    cd .circleci/ansible
-                    ansible-playbook -i inventory.txt configure-server.yml
-                
-        - destroy-environment       
+    
   configure-infrastructure:
     docker:
         - image:  circleci/node:13.8.0
