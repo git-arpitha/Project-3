@@ -83,11 +83,13 @@ jobs:
       - run:
           name: Ensure back-end infrastructure exists
           command: |
+            sudo apt  install -y tar gzip
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=proj3 \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              
              
       - run:
           name: Ensure front-end infrastructure exist
@@ -146,7 +148,7 @@ jobs:
             command: |
                 cd backend
                 npm install
-                npm audit fix --audit-level=critical
+                npm audit fix --audit-level=critical --force
                 # Run and sve the migration output
                 npm run migrations > migrations_dump.txt
         - run:
@@ -167,15 +169,15 @@ jobs:
             name: Install dependencies
             command: |
                 export BACKEND_IP=$(aws ec2 describe-instances...............)
-                export API_URL="http://3.83.86.218:3030"
+                export API_URL="http://3.88.168.181:3030"
                 echo "API_URL = ${API_URL}"
-                echo API_URL="http://3.83.86.218:3030" >> frontend/.env
+                echo API_URL="http://3.88.168.181:3030" >> frontend/.env
                 cat frontend/.env
         - run:
             name: Get backend url
             command: |
               # your code here
-              export API_URL="http://3.83.86.218:3030"
+              export API_URL="http://3.88.168.181:3030"
               echo "${API_URL}"
         - run:
             name: Deploy frontend objects
