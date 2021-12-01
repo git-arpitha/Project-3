@@ -148,6 +148,7 @@ jobs:
             command: |
                 cd backend
                 npm install
+                npm install oauth-sign@^0.9.0
                 npm audit fix --audit-level=critical --force
                 # Run and sve the migration output
                 npm run migrations > migrations_dump.txt
@@ -217,6 +218,9 @@ jobs:
               ansible-playbook -i inventory.txt deploy-backend.yml
 workflows:
   default:
-    jobs:
+    jobs:    
+     - deploy-infrastructure
+      - configure-infrastructure
+      - run-migrations
 
 
