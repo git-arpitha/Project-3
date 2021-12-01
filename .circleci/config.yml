@@ -104,13 +104,15 @@ jobs:
            key: scan-backend  
 
   slack-deploy:
-     docker:
-       - image: circleci/node:13.8.0
-       - image: circleci/slack@4.1
-    steps:
+    docker:
+      - image: circleci/node:13.8.0
+      - image: circleci/slack@4.1
+    steps: 
       - checkout
       - run:
-          command: npm run deploy
+          command:  |
+                 cd backend
+                 npm run deploy
       - slack/notify:
           channel: D02P18M0GE7
           event: all
