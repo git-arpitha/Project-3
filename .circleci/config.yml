@@ -115,9 +115,10 @@ jobs:
       - run:
           command:  |
                  cd backend
+                 npm install
                  npm run build
       - slack/notify:
-          channel: Project3
+          channel: C02NRG0H0F9
           event: always
           template: basic_fail_1     
 
