@@ -199,8 +199,7 @@ jobs:
               command: |
                       cd backend
                       npm install
-                      sudo chown -R `whoami` ~/.npm
-                      sudo chown -R `whoami` /usr/local/lib/node_modules
+                      npm run build
                       sudo apt-get update
                       sudo apt-get install ansible
                       npm install -g aws-cli
