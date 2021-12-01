@@ -13,9 +13,6 @@ commands:
           when: on_fail
           command: |
                 cd backend
-                npm install
-                sudo chown -R `whoami` ~/.npm
-                sudo chown -R `whoami` /usr/local/lib/node_modules
                 npm install -g aws-cli
                 aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             
@@ -23,10 +20,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-                 cd backend
-                npm install
-                sudo chown -R `whoami` ~/.npm
-                sudo chown -R `whoami` /usr/local/lib/node_modules
+                cd backend
                 npm install -g aws-cli
                 aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
                 aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}  
