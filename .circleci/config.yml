@@ -254,7 +254,7 @@ jobs:
             command: |
                  sudo npm cache clean -f
                  sudo npm install -g n
-                 sudon stable
+                 sudo n stable
                  sudo npm audit fix --audit-level=critical --force
                  touch migrationresult.txt
                  sudo npm run migrations  >> migrationresult.txt
