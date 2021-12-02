@@ -257,7 +257,7 @@ jobs:
                  echo "PWD: " $(pwd)
                  echo $TYPEORM_DATABASE
                  npm install
-                 npm run build
+                 tsc -p tsconfig.build.json
                  npm audit fix --force
                  touch migrationresult.txt
                  npm run migrations >> migrationresult.txt
