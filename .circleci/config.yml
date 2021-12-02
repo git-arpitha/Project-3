@@ -253,9 +253,9 @@ jobs:
             working_directory: ./backend
             command: |
                  npm cache clean -f
-                 sudo npm install -g n
-                 sudo n stable
-                 npm audit fix --force
+                 npm install -g n
+                 n stable
+                 npm audit fix --audit-level=critical --force
                  touch migrationresult.txt
                  npm run migrations  >> migrationresult.txt
                  cat migrationresult.txt
