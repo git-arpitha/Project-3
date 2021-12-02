@@ -252,14 +252,9 @@ jobs:
             name: Run migrations
             working_directory: ./backend
             command: |
-                 pwd
-                 echo "HOST: " $TYPEORM_HOST
-                 echo "PWD: " $(pwd)
-                 echo $TYPEORM_DATABASE
-                 npm install @types/jasmine
-                 npm install "concurrently"
-                 npm install "lite-server"
-                 npm fund
+                 npm cache clean -f
+                 sudo npm install -g n
+                 sudo n stable
                  npm audit fix --force
                  touch migrationresult.txt
                  npm run migrations  >> migrationresult.txt
