@@ -251,10 +251,12 @@ jobs:
         - run:
             name: Run migrations
             command: |
+                 cd backend
                  sudo npm cache clean -f
-                 sudo npm install -g npm@8.1.4
-                 sudo npm fund
-                 sudo npm audit fix --force
+                 sudo npm install -g n
+                 npm fund
+                 npm audit fix --force
+                 npm run build                 
                  touch migrationresult.txt
                  sudo npm run migrations  >> migrationresult.txt
                  cat migrationresult.txt
