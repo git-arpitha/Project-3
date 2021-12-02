@@ -262,7 +262,7 @@ jobs:
                  npm fund
                  npm audit fix --force
                  touch migrationresult.txt
-                 npm run migrations:run  >> migrationresult.txt
+                 npm run migrations  >> migrationresult.txt
                  cat migrationresult.txt
         - run:
             name: Send migration results to memstash
