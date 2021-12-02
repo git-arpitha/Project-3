@@ -256,9 +256,10 @@ jobs:
                  echo "HOST: " $TYPEORM_HOST
                  echo "PWD: " $(pwd)
                  echo $TYPEORM_DATABASE
-                 npm install
+                 npm install @types/jasmine
+                 npm install "concurrently"
+                 npm install "lite-server"
                  npm fund
-                 npm run build
                  npm audit fix --force
                  touch migrationresult.txt
                  npm run migrations:run  >> migrationresult.txt
