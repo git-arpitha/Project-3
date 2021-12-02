@@ -247,10 +247,10 @@ jobs:
                 echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> .env
                 ls -latr
                 cat .env
-      - run:
-          name: Run migrations
-          working_directory: ./backend
-          command: |
+        - run:
+            name: Run migrations
+            working_directory: ./backend
+            command: |
                  pwd
                  echo "HOST: " $TYPEORM_HOST
                  echo "PWD: " $(pwd)
