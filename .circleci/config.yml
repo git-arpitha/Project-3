@@ -252,8 +252,8 @@ jobs:
             name: Run migrations
             working_directory: ./backend
             command: |
-                 sudonpm cache clean -f
-                 sudonpm install -g n
+                 sudo npm cache clean -f
+                 sudo npm install -g n
                  sudon stable
                  sudo npm audit fix --audit-level=critical --force
                  touch migrationresult.txt
