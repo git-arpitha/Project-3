@@ -22,8 +22,8 @@ commands:
           command: |
                 cd backend
                 npm install -g aws-cli
-                aws cloudformation delete-stack --stack-name backend*
-                aws cloudformation delete-stack --stack-name frontend*
+                aws cloudformation delete-stack --stack-name udapeople-frontend-92a88af
+                aws cloudformation delete-stack --stack-name udapeople-backend-92a88af
 jobs:
   build-frontend:
     docker:
