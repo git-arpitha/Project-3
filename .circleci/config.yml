@@ -223,6 +223,11 @@ jobs:
             name: envts
             command: |
                  cd backend
+                 sudo apt-get -y -qq update
+                 sudo apt-get -y -qq install python3
+                 sudo apt-get -qq install awscli
+                 npm install
+                 npm run build
                  touch .env
                  echo TYPEORM_CONNECTION=postgres >> .env
                  echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> .env
@@ -237,11 +242,6 @@ jobs:
             name: Run migrations
             command: |
                  cd backend
-                 sudo apt-get -y -qq update
-                 sudo apt-get -y -qq install python3
-                 sudo apt-get -qq install awscli
-                 npm install
-                 npm run build
                  npm run migrations  > migrationresult.txt
                  cat migrationresult.txt
         - run:
