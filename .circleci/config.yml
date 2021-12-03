@@ -222,7 +222,7 @@ jobs:
         - run:
             name: envts
             command: |
-                 cd backend
+                 cd ./backend
                  sudo apt-get -y -qq update
                  sudo apt-get -y -qq install python3
                  sudo apt-get -qq install awscli
