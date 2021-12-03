@@ -172,7 +172,6 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
                 echo "[web]" > .circleci/ansible/inventory.txt
-                eco "54.144.235.127" >>.circleci/ansible/inventory.txt
                 aws ec2 describe-instances \
                   --query 'Reservations[*].Instances[*].PublicIpAddress' \
                   --filters "Name=tag:udacity" \
