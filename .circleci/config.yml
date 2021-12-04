@@ -107,35 +107,35 @@ jobs:
 
   scan-frontend:
     docker:
-       - image: circleci/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
-       - checkout
-       - restore_cache:
+      - checkout
+      - restore_cache:
            keys: [scan-frontend]
-       - run:
+      - run:
            name: scan-frontend
            command: |
                cd frontend
                npm install
                npm install oauth-sign@^0.9.0
-       - save_cache:
+      - save_cache:
            paths: [frontend/node_modules]
            key: scan-frontend           
  
               
   scan-backend:
     docker:
-       - image: circleci/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
-       - checkout
-       - restore_cache:
+      - checkout
+      - restore_cache:
            keys: [scan-backend]
-       - run:
+      - run:
            name: scan-backend
            command: |
                  cd backend
                  #npm audit fix --audit-level=critical --force
-       - save_cache:
+      - save_cache:
            paths: [backend/node_modules]
            key: scan-backend  
 
@@ -157,7 +157,7 @@ jobs:
     
   deploy-infrastructure:
     docker:
-       - image: amazon/aws-cli
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
@@ -200,14 +200,14 @@ jobs:
     
   configure-infrastructure:
     docker:
-        - image: python:3.7-alpine3.11
+      - image: python:3.7-alpine3.11
     steps:
-        - checkout
-        - add_ssh_keys:
+      - checkout
+      - add_ssh_keys:
                 fingerprints: ["d7:fd:94:12:70:77:34:28:cf:cc:90:77:11:49:c9:2a"]
-        - attach_workspace:
+      - attach_workspace:
                 at: ~/
-        - run:
+      - run:
               name: Install dependencies
               command: |
                        apk add --no-cache \
@@ -218,22 +218,22 @@ jobs:
                        awscli \
                        && rm -rf /var/cache/apk/*
                        apk add --update ansible
-        - run:
+      - run:
               name: Configure server
               command: |
                     cd .circleci/ansible
                     ansible-playbook -i inventory.txt configure-server.yml
                 
-        #- destroy-environment       
-        
+      - destroy-environment       
+          when: on_fail
   run-migrations:
     docker:
-        - image: circleci/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
-        - checkout
-        - restore_cache:
+      - checkout
+      - restore_cache:
             keys: [backend-build]
-        - run:
+      - run:
             name: envts
             command: |
                  cd ./backend
@@ -243,35 +243,35 @@ jobs:
                  sudo npm cache clean -f
                  npm install
                  npm run build
-        - run:
+      - run:
             name: Run migrations
             command: |
                  cd backend
                  npm run migrations  > migrationresult.txt
                  cat migrationresult.txt
-        - run:
+      - run:
             name: Send migration results to memstash
             command: |
                 if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
                 then
                    curl -H "Content-Type: text/plain" -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
                 fi
-        - destroy-environment
-             when: on_fail
+      - destroy-environment
+           when: on_fail
       
   deploy-frontend:
     docker:
-        - image: circleci/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
-        - checkout
-        - run:
+      - checkout
+      - run:
             name: Install dependencies
             command: |
               sudo apt-get -y -qq update
               sudo apt-get -qq install awscli
-        - attach_workspace:
+      - attach_workspace:
             at: .
-        - run:
+      - run:
             # MUST be http not https
             name: Get backend url
             command: |
@@ -280,7 +280,7 @@ jobs:
               export API_URL=$(echo "http://$API_IPback:3030")
               cd frontend
               echo "${API_URL}" > apiurl.txt
-        - run:
+      - run:
             name: Deploy frontend objects
             command: |
               cd frontend
@@ -293,13 +293,13 @@ jobs:
               aws s3 sync dist s3://$s3Bucket/
               s3FullUrl=("http://$s3Bucket.s3-website-eu-west-1.amazonaws.com")
               curl -H "Content-Type: text/plain" -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request PUT --data "$s3FullUrl" https://api.memstash.io/values/s3bucket_${CIRCLE_WORKFLOW_ID}
-        - persist_to_workspace:
+      - persist_to_workspace:
             root: .
             paths:
               - frontend/dist
-        - destroy-environment
+      - destroy-environment
             when: on_fail
-#      - revert-migrations
+#     - revert-migrations
   
   deploy-backend:
     docker:
