@@ -4,19 +4,14 @@ orbs:
   slack: circleci/slack@4.1
 commands:
   destroy-environment:
-#   description: Destroy   back-end and front-end cloudformation stacks  given a workflow ID.
-#   parameters:
-#     message:
-#       type: string
-#   steps:
-#     - run: echo << parameters.message >>
-#   steps:
-#     - run:
-#        name: Delete S3 content
-#        command: |
-#              cd backend
-#              npm install -g aws-cli
-#              aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+   description: Destroy   back-end and front-end cloudformation stacks  given a workflow ID.
+   steps:
+     - run:
+        name: Delete S3 content
+        command: |
+              cd backend
+              npm install -g aws-cli
+              aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
     steps:       
       - run:
           name: Destroy environments
@@ -435,7 +430,7 @@ jobs:
             yum -y install jq tar gzip git curl
       
       - run:
-          name: Remove old stacks and files
+          name: Cleanup old stacks and files
           command: |
             # get old WorkFlowId  
             export OldWorkflowID=$(curl -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request GET https://api.memstash.io/values/OldWorkflowID_${CIRCLE_WORKFLOW_ID:0:7})
@@ -457,34 +452,34 @@ jobs:
 workflows:
   default:
     jobs:
-   #   - build-frontend
-   #   - build-backend
-   #   - test-frontend:
-   #       requires: [build-frontend]
-   #   - test-backend:
-   #       requires: [build-backend]
-   #   - scan-backend:
-   #       requires: [build-backend]
-   #   - scan-frontend:
-   #       requires: [build-frontend]
-   #  # -  slack-deploy
-   #   - deploy-infrastructure:
-   #       requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-   #   - configure-infrastructure:
-   #       requires: [deploy-infrastructure]
-   #   - run-migrations:
-   #       requires: [configure-infrastructure]
-   #   - deploy-backend:
-   #       requires: [ run-migrations ]
-   #   - deploy-frontend:
-   #       requires: [ deploy-backend ]
-   #   - smoke-test:
-   #       requires:
-   #        - deploy-frontend
-   #        - deploy-backend
-   #   - cloudfront-update:
-   #       requires: [ smoke-test ]
-      - cleanup
-   #       requires: [ cloudfront-update ] 
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
+     # -  slack-deploy
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-backend:
+          requires: [ run-migrations ]
+      - deploy-frontend:
+          requires: [ deploy-backend ]
+      - smoke-test:
+          requires:
+           - deploy-frontend
+           - deploy-backend
+      - cloudfront-update:
+          requires: [ smoke-test ]
+      - cleanup:
+          requires: [ cloudfront-update ] 
       
 
