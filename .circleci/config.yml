@@ -7,7 +7,7 @@ commands:
     description: Destroy   back-end and front-end cloudformation stacks  given a workflow ID.
     #parameters:
       # Add parameter here   
- #  steps:
+    steps:
  #    - run:
  #        name: Delete S3 content
  #        when: on_fail
