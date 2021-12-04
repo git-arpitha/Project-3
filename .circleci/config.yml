@@ -8,7 +8,7 @@ commands:
     steps:
       - run:
           name: Destroy environments
-         # when: on_fail
+          when: on_fail
           command: |
                 cd backend
                 aws s3 rm s3://udapeople-${OldWorkflowID} --recursive
@@ -363,9 +363,9 @@ jobs:
             if curl -s "http://$API_IPback:3030/api/status" | grep "ok"
             then
               echo "Backend alive, Proceeding"
-              exit 0
+              exit 1
             else
-              exit 0
+              exit 1
             fi
       - run:
           name: Frontend smoke test.
@@ -374,13 +374,13 @@ jobs:
             if curl -s ${front_url} | grep "Welcome"
             then
               echo "Frontend alive"
-              exit 0
+              exit 1
             else
-              exit 0
+              exit 1
             fi
 
     #  - revert-migrations
-    # - destroy-environment
+     - destroy-environment
   cloudfront-update:
     docker:
       - image: amazon/aws-cli
@@ -459,6 +459,10 @@ workflows:
      # -  slack-deploy
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+              branches:
+                only:
+                  - master
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
