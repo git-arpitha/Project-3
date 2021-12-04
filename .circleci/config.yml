@@ -11,7 +11,7 @@ commands:
           when: on_fail
           command: |
                 cd backend
-                aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+                #aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
                 aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
                 aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
                 
@@ -195,7 +195,8 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
             
-     # - destroy-environment
+      - destroy-environment
+          when: on_fail
     
   configure-infrastructure:
     docker:
@@ -255,7 +256,8 @@ jobs:
                 then
                    curl -H "Content-Type: text/plain" -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
                 fi
-       # - destroy-environment   
+        - destroy-environment
+             when: on_fail
       
   deploy-frontend:
     docker:
@@ -295,7 +297,8 @@ jobs:
             root: .
             paths:
               - frontend/dist
-#        - destroy-environment
+        - destroy-environment
+            when: on_fail
 #      - revert-migrations
   
   deploy-backend:
@@ -331,7 +334,8 @@ jobs:
             cat .circleci/ansible/inventory.txt
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
 #      - revert-migrations
-#      - destroy-environment
+      - destroy-environment
+           when: on_fail
   smoke-test:
     docker:
       - image: python:3.7-alpine3.12 
@@ -367,7 +371,8 @@ jobs:
             fi
 
     #  - revert-migrations
-     # - destroy-environment
+      - destroy-environment
+          when: on_fail
   cloudfront-update:
     docker:
       - image: amazon/aws-cli
@@ -398,7 +403,8 @@ jobs:
               --stack-name udapeople-${CIRCLE_WORKFLOW_ID:0:7} \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople	  
-     # - destroy-environment
+      - destroy-environment
+          when: on_fail
       #- revert-migrations
   cleanup:
     docker:
