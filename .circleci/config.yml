@@ -5,7 +5,7 @@ orbs:
 commands:
   destroy-environment:
    description: Destroy   back-end and front-end cloudformation stacks  given a workflow ID.
-   steps:
+    steps:
      - run:
         name: Delete S3 content
         command: |
