@@ -419,7 +419,7 @@ jobs:
             echo "Update CloudFront"
             aws cloudformation deploy \
               --template-file cloudfront.yml \
-              --stack-name udapeople-prod \
+              --stack-name udapeople-${CIRCLE_WORKFLOW_ID:0:7} \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople	  
      # - destroy-environment
@@ -429,32 +429,32 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-     # -  slack-deploy
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-backend:
-          requires: [ run-migrations ]
-      - deploy-frontend:
-          requires: [ deploy-backend ]
-      - smoke-test:
-          requires:
-           - deploy-frontend
-           - deploy-backend
-      - cloudfront-update:
-          requires: [ smoke-test ]
+ #    - build-frontend
+ #    - build-backend
+ #    - test-frontend:
+ #        requires: [build-frontend]
+ #    - test-backend:
+ #        requires: [build-backend]
+ #    - scan-backend:
+ #        requires: [build-backend]
+ #    - scan-frontend:
+ #        requires: [build-frontend]
+ #   # -  slack-deploy
+ #    - deploy-infrastructure:
+ #        requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+ #    - configure-infrastructure:
+ #        requires: [deploy-infrastructure]
+ #    - run-migrations:
+ #        requires: [configure-infrastructure]
+ #    - deploy-backend:
+ #        requires: [ run-migrations ]
+ #    - deploy-frontend:
+ #        requires: [ deploy-backend ]
+ #    - smoke-test:
+ #        requires:
+ #         - deploy-frontend
+ #         - deploy-backend
+      - cloudfront-update
+  #        requires: [ smoke-test ]
       
 
