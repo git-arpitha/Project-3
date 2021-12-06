@@ -401,6 +401,7 @@ jobs:
            OldWorkflowID=$(aws cloudformation \
                  list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                   --no-paginate --output text )
+           
            curl -H "Content-Type: text/plain" -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request PUT --data "${OldWorkflowID}" https://api.memstash.io/values/OldWorkflowID_${CIRCLE_WORKFLOW_ID:0:7}  
            
            echo "OldWorkflowID:  " $OldWorkflowID
@@ -426,6 +427,8 @@ jobs:
           name: Install dependencies
           command: |
             yum -y install jq tar gzip git curl
+            OldWorkflowID=72b6b4d
+            curl -H "Content-Type: text/plain" -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request PUT --data "${OldWorkflowID}" https://api.memstash.io/values/OldWorkflowID_${CIRCLE_WORKFLOW_ID:0:7}
       
       - run:
           name: Cleanup old stacks and files
