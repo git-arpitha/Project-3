@@ -28,7 +28,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=`curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}`
+            SUCCESS=`curl -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}`
             if [[ $SUCCESS == 1 ]];
             then
               cd ~/project/backend
@@ -298,7 +298,7 @@ jobs:
               - frontend/dist
       - destroy-environment
 
-#     - revert-migrations
+
   
   deploy-backend:
     docker:
@@ -332,7 +332,7 @@ jobs:
             pwd
             cat .circleci/ansible/inventory.txt
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
-#      - revert-migrations
+
       - destroy-environment
     
   smoke-test:
