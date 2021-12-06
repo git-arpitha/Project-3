@@ -393,7 +393,9 @@ jobs:
                          list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                          --no-paginate --output text | tr -d '\n')
            curl -H "Content-Type: text/plain" -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request PUT --data "${OldWorkflowID}" https://api.memstash.io/values/OldWorkflowID_${CIRCLE_WORKFLOW_ID:0:7}
-      - run:
+           echo "OldWorkflowID:  "$OldWorkflowID
+           echo "Current WorkFlowID: " $CIRCLE_WORKFLOW_ID
+- run:
           name: Update cloudfront distribution
           working_directory: ./.circleci/files
           command: |
@@ -404,7 +406,7 @@ jobs:
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople	  
       - destroy-environment
-      #- revert-migrations
+      - revert-migrations
   cleanup:
     docker:
       - image: amazon/aws-cli
