@@ -284,7 +284,6 @@ jobs:
             name: Get backend url
             command: |
               API_IPback=$(curl -H "token: e0afd09a-8dcc-48bb-b177-4ffcfca02460" --request GET https://api.memstash.io/values/ec2_back_ip_${CIRCLE_WORKFLOW_ID})
-              #API_IPback=18.205.156.225
               export API_URL=$(echo "http://$API_IPback:3030")
               cd frontend
               echo "${API_URL}" > apiurl.txt
@@ -454,38 +453,38 @@ jobs:
 workflows:
   default:
     jobs:
-   #   - build-frontend
-   #   - build-backend
-   #   - test-frontend:
-   #       requires: [build-frontend]
-   #   - test-backend:
-   #       requires: [build-backend]
-   #   - scan-backend:
-   #       requires: [build-backend]
-   #   - scan-frontend:
-   #       requires: [build-frontend]
-   #  # -  slack-deploy
-   #   - deploy-infrastructure:
-   #       requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-   #       filters:
-   #           branches:
-   #             only:
-   #               - master
-   #   - configure-infrastructure:
-   #       requires: [deploy-infrastructure]
-   #   - run-migrations:
-   #       requires: [configure-infrastructure]
-   #   - deploy-backend:
-   #       requires: [ run-migrations ]
-   #   - deploy-frontend:
-   #       requires: [ deploy-backend ]
-   #   - smoke-test:
-   #       requires:
-   #        - deploy-frontend
-   #        - deploy-backend
-   #   - cloudfront-update:
-   #       requires: [ smoke-test ]
-      - cleanup
- #         requires: [ cloudfront-update ] 
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
+     # -  slack-deploy
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+              branches:
+                only:
+                  - master
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-backend:
+          requires: [ run-migrations ]
+      - deploy-frontend:
+          requires: [ deploy-backend ]
+      - smoke-test:
+          requires:
+           - deploy-frontend
+           - deploy-backend
+      - cloudfront-update:
+          requires: [ smoke-test ]
+      - cleanup:
+          requires: [ cloudfront-update ] 
       
 
