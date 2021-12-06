@@ -189,6 +189,15 @@ jobs:
                   --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                   --output text >> .circleci/ansible/inventory.txt
                  cat .circleci/ansible/inventory.txt
+      - run:
+          name: Save backend URL in memstash
+          command: |
+              BACKEND_IP=$(aws ec2 describe-instances \
+                  --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                  --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                  --output text)
+              curl -H "Content-Type: text/plain" -H "token: 105ff6c1-f3f1-4577-ae50-6cdacd934061" --request PUT --data "$BACKEND_IP" https://api.memstash.io/values/ec2_back_ip_${CIRCLE_WORKFLOW_ID}
+              echo "EC2_Backend IP: "$BACKEND_IP 
             
       - persist_to_workspace:
           root: ~/
