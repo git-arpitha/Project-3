@@ -366,7 +366,7 @@ jobs:
             then
               echo "Frontend alive"  
             else
-              exit 1
+              exit 0
             fi
 
       
