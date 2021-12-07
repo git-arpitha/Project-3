@@ -361,6 +361,7 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> $myenv
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> $myenv
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> $myenv
+            cat $myenv
             tar -C backend -czvf artifact.tar.gz .
             ls -la
       - run:
